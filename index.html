@@ -108,7 +108,7 @@ justify-content: space-around;
     </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap" id="wrap">
     <div class='top'>
       <img src="./acdf3b38ac1777ae9dbd7fea4c8538f6_1.jpg" alt="">
 <p class="title">
@@ -180,20 +180,29 @@ justify-content: space-around;
     </div>
     <div class="img_show">
       <img src="./right.jpg" alt="">
-
     </div>
 
-    <!-- <div class="footer">
-        <p>
-          图片为示例无关性别
-        </p>
-        <p>
-          性别请以实际为准
-        </p>
-    </div> -->
+      <div class="footer" id="footer">
+        <p><button id="exportButton" onclick="exportAsImage()">导出为图片</button></p>
+          <p><a href="https://www.hblyan.com/">https://www.hblyan.com/</a></p>
+      </div>
   </div>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+
+function exportAsImage() {
+  document.getElementById('footer').style.opacity = 0
+      const container = document.getElementById('wrap');
+      html2canvas(container).then((canvas) => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'health_report.png';
+        link.click();
+  document.getElementById('footer').style.opacity = 1
+
+      });
+    }
+
         function calculate() {
             const height = parseFloat(document.getElementById("height").value);
             const weight = parseFloat(document.getElementById("weight").value) / 2;
