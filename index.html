@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Metrics Calculator</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 400px;
+        border-collapse: collapse;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #000;
+      }
+      .label {
+        background-color: rgb(63, 196, 192);
+        font-weight: bold;
+        color: black;
+      }
+      .value {
+        background-color: #eaeaea;
+      }
+      .highlight-red {
+        color: red;
+      }
+      .small-text {
+        font-size: 12px;
+        line-height: 20px;
+        margin-top: 10px;
+        text-align: left;
+        margin-left: 10px;
+      }
+      .small-text span{
+        color: red;
+      }
+
+      .wrap{
+        border: 5px solid #006400;
+        flex-wrap: wrap;
+        margin: 10px auto;
+        display: flex;
+        width: 900px;
+      }
+      .wrap img{
+        width: 100%;
+        height: 100%;
+      }
+      .img_show{
+        flex: 1;
+      }
+
+      #weightLower,#weightUpper{
+color: red;
+      }
+      input,select{
+        padding: 10px;
+        border: none;
+        outline: none;
+      }
+
+      .top{
+        width: 900px;
+        display: flex;
+        padding: 10px;
+      }
+      .footer{
+        width: 900px;
+        display: flex;
+        padding: 10px;
+        font-size: 40px;
+justify-content: space-around;
+      }
+      .footer p{
+        text-align: center;
+
+      }
+      .top img{
+        height: 120px;
+        width: 120px;
+      }
+      .title span{
+        color: #006400;
+        font-size: 45px;
+        font-family: cursive;
+      }
+      .title{
+        font-size: 35px;
+        text-align: center;
+        flex: 1;
+        line-height: 100px;
+        font-family: cursive;
+      }
+      span{
+        font-weight: bold;
+      }
+      
+    </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class='top'>
+      <img src="./acdf3b38ac1777ae9dbd7fea4c8538f6_1.jpg" alt="">
+<p class="title">
+  <span>富哥为你生成健康</span>评估分析报告
+</p>
+    </div>
+    <div class="container">
+      <table>
+        <tr>
+          <td class="label">身高 (cm)</td>
+          <td class="value"><input type="number" id="height" onchange="calculate()" placeholder="请输入身高"></td>
+        </tr>
+        <tr>
+          <td class="label">体重 (斤)</td>
+          <td class="value"><input type="number" id="weight" onchange="calculate()" placeholder="请输入体重"></td>
+        </tr>
+        <tr>
+          <td class="label">年龄</td>
+          <td class="value"><input type="number" id="age" onchange="calculate()" placeholder="请输入年龄"></td>
+        </tr>
+        <tr>
+          <td class="label">性别</td>
+          <td class="value"><select id="gender" onchange="calculate()">
+            <option value="1">男</option>
+            <option value="0">女</option>
+        </select></td>
+        </tr>
+        <tr>
+          <td class="label">BMI (kg/m²)</td>
+          <td class="value"><span id="bmi"></span></td>
+        </tr>
+        <tr>
+          <td class="label">健康体重 (斤)</td>
+          <td class="value"><span id="standardWeight"></span></td>
+        </tr>
+        <tr>
+          <td class="label">体重下限 (斤)</td>
+          <td class="value"><span id="weightLower"></span></td>
+        </tr>
+        <tr>
+          <td class="label">体重上限 (斤)</td>
+          <td class="value"><span id="weightUpper"></span></td>
+        </tr>
+        <tr>
+          <td class="label">肥胖程度判断</td>
+          <td class="value"><span id="obesityLevel"></span></td>
+        </tr>
+        <tr>
+          <td class="label">体脂率推算</td>
+          <td class="value"><span id="bodyFat"></span>%</td>
+        </tr>
+        <tr>
+          <td class="label">脂肪总量 (斤)</td>
+          <td class="value"><span id="fatMass"></span></td>
+        </tr>
+        <tr>
+          <td class="label">基础代谢 (kcal)</td>
+          <td class="value"><span id="bmr"></span></td>
+        </tr>
+      </table>
+      <div class="small-text">
+        <span>BMI 越大 ↑ 患病率越高 ↑</span><br>
+        22＜BMI＜25之间，长寿且不易得病<br>
+        25≤BMI＜29.9，预估<span>减少寿命 3-9年</span><br>
+        30≤BMI＜34.9，预估<span>减少寿命 8.5-9年</span><br>
+        BMI≥35，<span>死亡率上升</span> <br>
+        BMI>40,可能<span>减少寿命 10-20年</span>
+      </div>
+    </div>
+    <div class="img_show">
+      <img src="./right.jpg" alt="">
+
+    </div>
+
+    <!-- <div class="footer">
+        <p>
+          图片为示例无关性别
+        </p>
+        <p>
+          性别请以实际为准
+        </p>
+    </div> -->
+  </div>
+
+    <script>
+        function calculate() {
+            const height = parseFloat(document.getElementById("height").value);
+            const weight = parseFloat(document.getElementById("weight").value) / 2;
+            const age = parseFloat(document.getElementById("age").value);
+            const gender = parseInt(document.getElementById("gender").value);
+
+            if (!height || !weight || !age) return;
+
+            // BMI Calculation
+            const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+            document.getElementById("bmi").textContent = bmi;
+
+            // Standard Weight Calculation
+            let standardWeight;
+            if (gender === 1) {
+                standardWeight = ((height - 80) * 0.7 * 2).toFixed(1);
+            } else {
+                standardWeight = ((height - 80) * 0.6 * 2).toFixed(1);
+            }
+            document.getElementById("standardWeight").textContent = standardWeight;
+
+            // Weight Limits
+            const weightLower = (standardWeight * 0.94).toFixed(1);
+            const weightUpper = (standardWeight * 1.08).toFixed(1);
+            document.getElementById("weightLower").textContent = weightLower;
+            document.getElementById("weightUpper").textContent = weightUpper;
+
+            // Obesity Level Judgment
+            let obesityLevel;
+            if (bmi <= 18.4) {
+                obesityLevel = "偏瘦";
+            } else if (bmi >= 18.5 && bmi <= 23.9) {
+                obesityLevel = "正常";
+            } else if (bmi >= 24 && bmi <= 27.9) {
+                obesityLevel = "过重";
+            } else {
+                obesityLevel = "肥胖";
+            }
+            document.getElementById("obesityLevel").textContent = obesityLevel;
+
+            const color = {
+              偏瘦: '#008000',
+              正常: '#FFA07A',
+              过重: '#800000',
+              肥胖: '#8B0000',
+            }
+            document.getElementById("obesityLevel").style.color = color[obesityLevel]
+
+
+            // Body Fat Percentage Calculation
+            let bodyFat;
+            if (gender === 1) {
+                bodyFat = ((1.2 * bmi) + (0.23 * age) - 16.2).toFixed(1);
+            } else {
+                bodyFat = ((1.2 * bmi) + (0.23 * age) - 5.4).toFixed(1);
+            }
+            document.getElementById("bodyFat").textContent = bodyFat;
+
+            // Fat Mass Calculation
+            const fatMass = ((bodyFat / 100) * weight * 2).toFixed(1);
+            document.getElementById("fatMass").textContent = fatMass;
+
+            // Basal Metabolic Rate (BMR) Calculation
+            let bmr;
+            if (gender === 1) {
+                bmr = (67 + (13.73 * weight) + (5 * height) - (6.9 * age)).toFixed(0);
+            } else {
+                bmr = (661 + (9.6 * weight) + (1.72 * height) - (4.7 * age)).toFixed(0);
+            }
+            document.getElementById("bmr").textContent = bmr;
+        }
+    </script>
+</body>
+</html>
